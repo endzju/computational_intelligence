@@ -24,6 +24,7 @@ class Hexapawn(TwoPlayerGame):
 
         self.players = players
         self.current_player = 1
+        self.move_count = 0
 
     def possible_moves(self):
         moves = []
@@ -46,6 +47,8 @@ class Hexapawn(TwoPlayerGame):
 
         if move[1] in self.opponent.pawns:
             self.opponent.pawns.remove(move[1])
+        
+        self.move_count += 1
 
     def lose(self):
         return any([i == self.opponent.goal_line for i, j in self.opponent.pawns]) or (

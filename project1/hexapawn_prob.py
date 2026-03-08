@@ -25,6 +25,7 @@ class HexapawnProb(Hexapawn):
         self.current_player = 1
         self.captured_pawns = []
         self.respawn_prob = respawn_prob
+        self.move_count = 0
 
     @override
     def possible_moves(self):
@@ -44,7 +45,7 @@ class HexapawnProb(Hexapawn):
         return list(map(self._to_string, [(i, j) for i, j in moves]))
 
     @override
-    def make_move(self, move):
+    def make_move(self, move, prob=True):
         move = list(map(self._to_tuple, move.split(" ")))
         ind = next((i for i, p in enumerate(self.player.pawns) if p.cur_pos == move[0]), -1)
         self.player.pawns[ind].cur_pos = move[1]
@@ -57,10 +58,27 @@ class HexapawnProb(Hexapawn):
             curr_player_start = 0 if self.current_player == 1 else self.size[0] - 1
             curr_player_captured = [pawn for pawn in self.captured_pawns if pawn.start_pos[0] == curr_player_start]
 
-            if curr_player_captured and random.random() <= self.respawn_prob:
+            if prob and curr_player_captured and random.random() <= self.respawn_prob:
                 p = random.choice(curr_player_captured)
                 p.cur_pos = p.start_pos
                 self.player.pawns.append(p)
+        
+        self.move_count += 1
+    
+    def get_num_prob_states(self):
+        curr_player_start = 0 if self.current_player == 1 else self.size[0] - 1
+        curr_player_captured = [pawn for pawn in self.captured_pawns if pawn.start_pos[0] == curr_player_start]
+        
+        return len(curr_player_captured)
+    
+    def apply_prob_state(self, i):
+        curr_player_start = 0 if self.current_player == 1 else self.size[0] - 1
+        curr_player_captured = [pawn for pawn in self.captured_pawns if pawn.start_pos[0] == curr_player_start]
+
+        if curr_player_captured:
+            p = curr_player_captured[i]
+            p.cur_pos = p.start_pos
+            self.player.pawns.append(p)
 
 
     @override
