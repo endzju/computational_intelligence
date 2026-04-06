@@ -108,23 +108,24 @@ def create_blocks_world(blocks = {'a','b','c','d'}):
     feature_domain_dict.update({clear(x):boolean for x in blocks_and_table})
     return STRIPS_domain(feature_domain_dict, stmap)
 
-blocks1dom = create_blocks_world({'a','b','c'})
-blocks1 = Planning_problem(blocks1dom,
-     {on('a'):'table', clear('a'):True,
-      on('b'):'c',  clear('b'):True,
-      on('c'):'table', clear('c'):False}, # initial state
-     {on('a'):'b', on('c'):'a'})  #goal
+if __name__ == 'main':
+    blocks1dom = create_blocks_world({'a','b','c'})
+    blocks1 = Planning_problem(blocks1dom,
+        {on('a'):'table', clear('a'):True,
+        on('b'):'c',  clear('b'):True,
+        on('c'):'table', clear('c'):False}, # initial state
+        {on('a'):'b', on('c'):'a'})  #goal
 
-blocks2dom = create_blocks_world({'a','b','c','d'})
-tower4 = {clear('a'):True, on('a'):'b',
-          clear('b'):False, on('b'):'c',
-          clear('c'):False, on('c'):'d',
-          clear('d'):False, on('d'):'table'}
-blocks2 = Planning_problem(blocks2dom,
-     tower4, # initial state
-     {on('d'):'c',on('c'):'b',on('b'):'a'})  #goal
+    blocks2dom = create_blocks_world({'a','b','c','d'})
+    tower4 = {clear('a'):True, on('a'):'b',
+            clear('b'):False, on('b'):'c',
+            clear('c'):False, on('c'):'d',
+            clear('d'):False, on('d'):'table'}
+    blocks2 = Planning_problem(blocks2dom,
+        tower4, # initial state
+        {on('d'):'c',on('c'):'b',on('b'):'a'})  #goal
 
-blocks3 = Planning_problem(blocks2dom,
-     tower4, # initial state
-     {on('d'):'a', on('a'):'b', on('b'):'c'})  #goal
+    blocks3 = Planning_problem(blocks2dom,
+        tower4, # initial state
+        {on('d'):'a', on('a'):'b', on('b'):'c'})  #goal
 
